@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
+import { registerUser } from "../services/UserService";
 
 // ✅ Shared helper to store user session data
 
@@ -134,10 +135,7 @@ const Register: React.FC = () => {
 
     setApiError("");
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/users/register",
-        formData
-      );
+      const response = await registerUser(formData)
 
       const newUser = response.data;
 
