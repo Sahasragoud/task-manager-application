@@ -9,8 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-@RestController @RequestMapping("/api/tasks")
-@CrossOrigin(origins = "http://localhost:5173")
+@RestController 
+@RequestMapping("/api/tasks")
+@CrossOrigin(origins = "http://192.168.117.6:5173")
 public class TaskController {
     private final TaskService taskService;
 

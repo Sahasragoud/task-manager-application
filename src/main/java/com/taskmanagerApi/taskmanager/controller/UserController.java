@@ -2,25 +2,18 @@ package com.taskmanagerApi.taskmanager.controller;
 
 import com.taskmanagerApi.taskmanager.dto.*;
 import com.taskmanagerApi.taskmanager.model.User;
-import com.taskmanagerApi.taskmanager.service.EmailSenderService;
 import com.taskmanagerApi.taskmanager.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/users")
-@CrossOrigin(origins = "http://localhost:5173")
-
+@RequestMapping("/api/users")
+@CrossOrigin(origins = "http://192.168.117.6:5173")
 public class UserController {
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
-    private final EmailSenderService emailSenderService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.emailSenderService = emailSenderService;
     }
 
     @GetMapping("/by-id")

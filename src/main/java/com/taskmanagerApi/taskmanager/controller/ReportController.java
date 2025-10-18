@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/reports")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin(origins = "http://192.168.117.6:5173")
 public class ReportController {
 
     private final ReportService reportService;
@@ -30,7 +30,7 @@ public class ReportController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<ReportResponse>> getReports(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size
@@ -39,7 +39,7 @@ public class ReportController {
     }
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<Report>> getReportsByUser(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
@@ -49,7 +49,7 @@ public class ReportController {
     }
 
     @PutMapping("/{reportId}/status")
-    @PreAuthorize("hasRole('ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Report> updateStatus(
             @PathVariable Long reportId,
             @RequestParam ReportStatus status) {

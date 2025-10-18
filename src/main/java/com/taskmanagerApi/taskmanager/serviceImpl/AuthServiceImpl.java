@@ -2,6 +2,8 @@ package com.taskmanagerApi.taskmanager.serviceImpl;
 
 import com.taskmanagerApi.taskmanager.dto.LoginRequest;
 import com.taskmanagerApi.taskmanager.dto.LoginResponse;
+import com.taskmanagerApi.taskmanager.dto.UserRequest;
+import com.taskmanagerApi.taskmanager.dto.UserResponse;
 import com.taskmanagerApi.taskmanager.enums.Role;
 import com.taskmanagerApi.taskmanager.exception.AccountBlockedException;
 import com.taskmanagerApi.taskmanager.exception.UserNotFoundException;
@@ -18,6 +20,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -97,8 +100,38 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User registerUser(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public UserResponse registerUser(UserRequest userRequest){
+    User user = new User();
+    user.setName(userRequest.getName());
+    user.setEmail(userRequest.getEmail());
+    user.setPassword(userRequest.getPassword());
+    user.setPhoneNumber(userRequest.getPhone());
+    user.setDateOfBirth(LocalDate.parse(userRequest.getDateOfBirth()));
+    user.setGender(userRequest.getGender());
+    user.setProfession(userRequest.getProfession());
+    user.setAddress(userRequest.getAddress());
+    user.setRole(Role.valueOf(
+        userRequest.getRole() != null ? userRequest.getRole().toUpperCase() : "USER"
+    ));
+    user.setPasswordExpiryDate(LocalDateTime.now().plusDays(30));
+
+    userRepository.save(user);
+
+    return new UserResponse(
+                            user.getId(), 
+                            user.getName(), 
+                            user.getEmail(),
+                            user.getPhoneNumber(),
+                            user.getDateOfBirth(),
+                            user.getGender(), 
+                            user.getRole(),
+                            user.getProfession(),
+                            user.getAddress(), 
+                            user.getFailedLoginAttempts(),
+                            user.getAccountLockedUntil(), 
+                            user.getFirstFailedAttemptAt(),
+                            user.getPasswordExpiryDate() ,
+                            user.getLastPasswordWarningSentAt()
+                        );
     }
 }
