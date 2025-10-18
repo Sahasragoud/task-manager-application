@@ -2,7 +2,6 @@ package com.taskmanagerApi.taskmanager.controller;
 import com.taskmanagerApi.taskmanager.dto.TaskRequest;
 import com.taskmanagerApi.taskmanager.model.Task;
 import com.taskmanagerApi.taskmanager.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class TaskController {
     private final TaskService taskService;
 
-    @Autowired
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }

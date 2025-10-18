@@ -1,7 +1,6 @@
 package com.taskmanagerApi.taskmanager.service;
 
 import com.taskmanagerApi.taskmanager.dto.TaskRequest;
-import com.taskmanagerApi.taskmanager.dto.TaskResponse;
 import com.taskmanagerApi.taskmanager.model.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

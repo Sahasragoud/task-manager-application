@@ -5,8 +5,6 @@ import com.taskmanagerApi.taskmanager.repository.UserRepository;
 import com.taskmanagerApi.taskmanager.service.EmailSenderService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,9 +22,6 @@ public class ScheduledEmailJob {
     @Scheduled(cron = "0 0 9 * * ?")
     public void sendPasswordExpiryWarnings(){
         System.out.println(" Running scheduled email check...");
-        LocalDate currDate = LocalDate.now();
-        LocalDate expiryWarning = currDate.plusDays(3);
-
         List<User> users = userRepository.findAll();
         for(User user : users){
             String subject = "Password Expiry Warning";

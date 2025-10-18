@@ -1,14 +1,12 @@
 package com.taskmanagerApi.taskmanager.serviceImpl;
 
 import com.taskmanagerApi.taskmanager.dto.TaskRequest;
-import com.taskmanagerApi.taskmanager.dto.TaskResponse;
 import com.taskmanagerApi.taskmanager.exception.UserNotFoundException;
 import com.taskmanagerApi.taskmanager.model.Task;
 import com.taskmanagerApi.taskmanager.model.User;
 import com.taskmanagerApi.taskmanager.repository.TaskRepository;
 import com.taskmanagerApi.taskmanager.repository.UserRepository;
 import com.taskmanagerApi.taskmanager.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,6 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
-    @Autowired
     public TaskServiceImpl(TaskRepository taskRepository,UserRepository userRepository){
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;

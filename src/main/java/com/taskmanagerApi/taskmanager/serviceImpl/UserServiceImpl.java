@@ -1,22 +1,15 @@
 package com.taskmanagerApi.taskmanager.serviceImpl;
 
 import com.taskmanagerApi.taskmanager.dto.*;
-import com.taskmanagerApi.taskmanager.enums.Role;
-import com.taskmanagerApi.taskmanager.exception.AccountBlockedException;
 import com.taskmanagerApi.taskmanager.exception.UserNotFoundException;
 import com.taskmanagerApi.taskmanager.jobs.ScheduledEmailJob;
 import com.taskmanagerApi.taskmanager.model.User;
 import com.taskmanagerApi.taskmanager.repository.UserRepository;
-import com.taskmanagerApi.taskmanager.service.EmailSenderService;
 import com.taskmanagerApi.taskmanager.service.UserService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -27,13 +20,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ScheduledEmailJob scheduledEmailJob;
-    private final EmailSenderService emailSenderService;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ScheduledEmailJob scheduledEmailJob, EmailSenderService emailSenderService) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ScheduledEmailJob scheduledEmailJob) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.scheduledEmailJob = scheduledEmailJob;
-        this.emailSenderService = emailSenderService;
     }
 
 

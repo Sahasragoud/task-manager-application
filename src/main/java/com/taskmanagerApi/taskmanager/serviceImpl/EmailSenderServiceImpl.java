@@ -5,7 +5,6 @@ import com.taskmanagerApi.taskmanager.repository.UserRepository;
 import com.taskmanagerApi.taskmanager.service.EmailSenderService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.javamail.JavaMailSender;
