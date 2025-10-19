@@ -1,8 +1,15 @@
 package com.taskmanagerApi.taskmanager.controller;
 
 import com.taskmanagerApi.taskmanager.dto.*;
+import com.taskmanagerApi.taskmanager.jobs.ScheduledEmailJob;
 import com.taskmanagerApi.taskmanager.model.User;
+import com.taskmanagerApi.taskmanager.service.EmailSenderService;
 import com.taskmanagerApi.taskmanager.service.UserService;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://192.168.117.6:5173")
 public class UserController {
     private final UserService userService;
+    private final ScheduledEmailJob emailJob;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ScheduledEmailJob emailJob) {
         this.userService = userService;
+        this.emailJob = emailJob;
     }
 
     @GetMapping("/by-id")
@@ -42,8 +51,19 @@ public class UserController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestBody String newPassword){
-        return userService.resetPassword(token,newPassword);
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
+        String newPassword = request.get("newPassword");
+        return userService.resetPassword(token, newPassword);
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        User user = userService.getUserByEmail(email);
+        if (user != null) {
+                userService.sendPasswordResetToken(user); // Service generates token + sends email
+        }
+        return ResponseEntity.ok("If this email exists, a reset link has been sent.");
+    }
 }

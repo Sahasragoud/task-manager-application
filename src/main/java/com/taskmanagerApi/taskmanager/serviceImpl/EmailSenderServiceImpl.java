@@ -97,4 +97,21 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             e.printStackTrace();
         }
     }
+    
+    
+    @Override
+public void sendPasswordResetEmail(String toEmail, String subject, String body) {
+    try {
+        MimeMessage msg = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+        helper.setTo(toEmail);
+        helper.setSubject(subject);
+        helper.setText(body);
+        mailSender.send(msg);
+        System.out.println("Reset email sent to: " + toEmail);
+    } catch (MessagingException e) {
+        e.printStackTrace();
+    }
+}
+
 }

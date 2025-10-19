@@ -15,4 +15,6 @@ public interface UserService {
     User findByResetToken(String token);
     void blockedAccountNotice();
     ResponseEntity<String> resetPassword(String token , String newPassword);
+    void sendPasswordResetToken(User user);
+
 }

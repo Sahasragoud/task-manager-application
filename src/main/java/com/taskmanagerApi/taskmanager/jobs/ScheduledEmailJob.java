@@ -43,8 +43,14 @@ public class ScheduledEmailJob {
         }
     }
 
+    public void sendPasswordResetEmail(String toEmail, String token) {
+        User user = userRepository.findByEmail(toEmail);
+        String resetLink = "http://192.168.117.6:5173/reset-password?token=" + token;
+            String subject = "Password Reset Request";
+            String body = "Hello, " + user.getName() + ",\n\nClick the link to reset your password:\n" 
+                        + resetLink + "\n\nNote: This link will expire in 15 minutes.\n\nTaskManager Team";
 
-
-
-
-}
+            emailSenderService.sendPasswordResetEmail(user.getEmail(), subject, body);
+        }    
+    }
+    

@@ -12,10 +12,7 @@ import com.taskmanagerApi.taskmanager.repository.UserRepository;
 import com.taskmanagerApi.taskmanager.service.AuthService;
 import com.taskmanagerApi.taskmanager.service.EmailSenderService;
 import com.taskmanagerApi.taskmanager.utility.JwtUtil;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,15 +27,13 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final EmailSenderService emailSenderService;
     private final JwtUtil jwtUtil;
-    private final AuthenticationManager authManager;
 
 
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService, JwtUtil jwtUtil, AuthenticationManager authManager) {
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailSenderService emailSenderService, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailSenderService = emailSenderService;
         this.jwtUtil = jwtUtil;
-        this.authManager = authManager;
     }
 
     @Override
@@ -81,9 +76,6 @@ public class AuthServiceImpl implements AuthService {
 
         String token;
         try {
-            Authentication authentication = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
             token = jwtUtil.generateToken(request.getEmail());
         } catch (AuthenticationException e) {
             throw new RuntimeException("Invalid Credentials");
@@ -101,23 +93,23 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserResponse registerUser(UserRequest userRequest){
-    User user = new User();
-    user.setName(userRequest.getName());
-    user.setEmail(userRequest.getEmail());
-    user.setPassword(userRequest.getPassword());
-    user.setPhoneNumber(userRequest.getPhone());
-    user.setDateOfBirth(LocalDate.parse(userRequest.getDateOfBirth()));
-    user.setGender(userRequest.getGender());
-    user.setProfession(userRequest.getProfession());
-    user.setAddress(userRequest.getAddress());
-    user.setRole(Role.valueOf(
-        userRequest.getRole() != null ? userRequest.getRole().toUpperCase() : "USER"
-    ));
-    user.setPasswordExpiryDate(LocalDateTime.now().plusDays(30));
+            User user = new User();
+            user.setName(userRequest.getName());
+            user.setEmail(userRequest.getEmail());
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            user.setPhoneNumber(userRequest.getPhone());
+            user.setDateOfBirth(LocalDate.parse(userRequest.getDateOfBirth()));
+            user.setGender(userRequest.getGender());
+            user.setProfession(userRequest.getProfession());
+            user.setAddress(userRequest.getAddress());
+            user.setRole(Role.valueOf(
+                userRequest.getRole() != null ? userRequest.getRole().toUpperCase() : "USER"
+            ));
+            user.setPasswordExpiryDate(LocalDateTime.now().plusDays(30));
 
-    userRepository.save(user);
+            userRepository.save(user);
 
-    return new UserResponse(
+            return new UserResponse(
                             user.getId(), 
                             user.getName(), 
                             user.getEmail(),

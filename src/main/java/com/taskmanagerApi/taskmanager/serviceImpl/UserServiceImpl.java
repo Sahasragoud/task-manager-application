@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -99,4 +100,20 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return ResponseEntity.ok("Password reset successful");
     }
+
+
+    @Override
+    public void sendPasswordResetToken(User user) {
+        if (user == null) return; 
+
+        String token = UUID.randomUUID().toString();
+        LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(30);
+
+        user.setResetToken(token);
+        user.setResetTokenExpiry(expiryDate);
+        userRepository.save(user);
+
+        scheduledEmailJob.sendPasswordResetEmail(user.getEmail(), token);
+    }
+
 }
