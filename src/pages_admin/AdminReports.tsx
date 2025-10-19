@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { getAllReports } from "../services/ReportService";
+import { getAllReports, updateReportStatus } from "../services/ReportService";
 import TaskPagination from "../components/TaskPagination";
 
 export type ReportStatus = "OPEN" | "IN_REVIEW" | "RESOLVED";
@@ -40,9 +39,7 @@ useEffect(() => {
 
   const handleResolve = async (id: number) => {
     try {
-      await axios.put(`http://localhost:8080/api/admin/reports/${id}/status`, "RESOLVED", {
-        headers: { "Content-Type": "application/json" },
-      });
+      await updateReportStatus(id, "RESOLVED");
       fetchReports(); // Refresh after updating
     } catch (err) {
       console.error("Failed to update report status", err);

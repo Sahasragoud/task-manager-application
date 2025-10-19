@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { registerUser } from "../services/UserService";
+import { useNavigate } from "react-router-dom";
 
 // ✅ Shared helper to store user session data
 
@@ -28,7 +29,7 @@ const Register: React.FC = () => {
     password: "",
     confirmPassword: "",
     phone: "",
-    dob: "",
+    dateOfBirth: "",
     gender: "",
     profession: "",
     address: "",
@@ -44,6 +45,7 @@ const Register: React.FC = () => {
     color: "red",
   });
   const [apiError, setApiError] = useState("");
+  const navigate = useNavigate();
 
   const evaluatePassword = (password: string) => {
     let strength = 0;
@@ -115,7 +117,7 @@ const Register: React.FC = () => {
       password: "",
       confirmPassword: "",
       phone: "",
-      dob: "",
+      dateOfBirth: "",
       gender: "",
       profession: "",
       address: "",
@@ -140,10 +142,15 @@ const Register: React.FC = () => {
       const newUser = response.data;
 
       // ✅ Save session like login
-      saveUserSession(newUser);
-
+      saveUserSession({
+        id : newUser.id!,
+        name : newUser.name,
+        email:newUser.email,
+        role : newUser.role,
+        token : newUser.token || "",
+      });
       clearForm();
-      window.location.href = "/user-dashboard";
+      navigate("/");
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         const msg =
@@ -265,8 +272,8 @@ const Register: React.FC = () => {
 
           <input
             type="date"
-            name="dob"
-            value={formData.dob}
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
             onChange={handleChange}
             className="w-full border rounded px-3 py-2"
           />

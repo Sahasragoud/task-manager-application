@@ -27,10 +27,12 @@ const AdminTopbar: React.FC<HeaderProps> = ({
 
   return (
     <header className="bg-white text-black flex justify-between items-center p-4 px-6 py-3 shadow-sm z-50">
-      <div className="text-lg font-semibold text-gray-800">
-        Dashboard – <span className="text-blue-600">{user?.name}</span>
-      </div>
-
+      {  user && (
+          <div className="text-lg font-semibold text-gray-800">
+            Dashboard – <span className="text-blue-600">{user?.name}</span>
+          </div>
+        )
+      }
       {/* 🔍 Search */}
       <div className="relative w-72">
         <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from "recharts";
+import { getAnalytics} from "../services/AnalyticsService";
 
 interface AnalyticsData {
   totalTasks: number;
@@ -15,15 +15,18 @@ const AdminTaskAnalytics: React.FC = () => {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const token = localStorage.getItem("token"); // token saved after login
-        const res = await axios.get("http://localhost:8080/api/admin/analytics", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await getAnalytics();
         setData(res.data);
-      } catch (error) {
-        console.error("Failed to fetch analytics:", error);
+      } catch (error: any) {
+          console.error("Failed to fetch analytics:", error);
+
+        if (error.response?.status === 401) {
+          // Token expired or invalid — let global handler show login modal
+          console.warn("401 Unauthorized: triggering login flow");
+        } else if (error.response?.status === 403) {
+          // User is logged in but forbidden (e.g., lacks role)
+          console.warn("403 Forbidden: user is logged in but not allowed to view analytics");
+        }
       }
     };
       fetchAnalytics();

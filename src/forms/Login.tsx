@@ -66,7 +66,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       setError("Login successful, but user data is incomplete.");
     }
 
-    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("token", response.data.token!);
+    console.log(response.data);
   }  catch (err) {
     if (axios.isAxiosError(err) && err.response) {
       // backend already returns { timestamp, status, message }
@@ -127,6 +128,16 @@ const handleSubmit = async (e: React.FormEvent) => {
                 {showPassword ? "🙈" : "👁"}
               </button>
             </div>
+          </div>
+
+          <div className="flex justify-end text-sm mt-1">
+            <button
+              type="button"
+              onClick={() => navigate("/forgot-password")}
+              className="text-blue-600 hover:underline"
+            >
+              Forgot Password?
+            </button>
           </div>
 
           <button

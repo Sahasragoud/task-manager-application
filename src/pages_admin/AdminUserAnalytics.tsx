@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from "recharts";
+import { getAnalytics } from "../services/AnalyticsService";
 
 interface AnalyticsUserData {
   totalUsers : number;
@@ -14,12 +14,7 @@ const AdminUserAnalytics: React.FC = () => {
 useEffect(() => {
 const fetchAnalytics = async () => {
   try {
-    const token = localStorage.getItem("token"); // token saved after login
-    const res = await axios.get("http://localhost:8080/api/admin/analytics", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await getAnalytics();
     setData(res.data);
   } catch (error) {
     console.error("Failed to fetch analytics:", error);

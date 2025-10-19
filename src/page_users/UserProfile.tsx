@@ -30,7 +30,7 @@ const UserProfile: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("userId");
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   const handleEdit = () => setIsEditing(true);
@@ -53,7 +53,7 @@ const UserProfile: React.FC = () => {
         email: form.email ? String(form.email) : undefined,
         phone: form.phone ? String(form.phone) : undefined,
         gender: form.gender ? String(form.gender) : undefined,
-        dob: form.dob ? String(form.dob) : undefined,
+        dob: form.dateOfBirth ? String(form.dateOfBirth) : undefined,
         address: form.address ? String(form.address) : undefined,
         profession: form.profession ? String(form.profession) : undefined,
     };
@@ -102,10 +102,11 @@ const UserProfile: React.FC = () => {
                 <ProfileField icon={<Mail size={20} />} label="Email" value={user.email} />
                 <ProfileField icon={<Phone size={20} />} label="Phone" value={user.phone || "Not provided"} />
                 <ProfileField icon={<UserCircle size={20} />} label="Gender" value={user.gender || "Not provided"} />
-                <ProfileField icon={<Calendar size={20} />} label="Date of Birth" value={user.dob || "Not provided"} />
+                <ProfileField icon={<Calendar size={20} />} label="Date of Birth" value={user.dateOfBirth|| "Not provided"} />
                 <ProfileField icon={<MapPin size={20} />} label="Address" value={user.address || "Not provided"} />
                 <ProfileField icon={<Briefcase size={20} />} label="Profession" value={user.profession || "Not provided"} />
               </div>
+
 
               {/* Actions */}
               <div className="flex justify-end gap-4 pt-6 border-t">
@@ -131,7 +132,7 @@ const UserProfile: React.FC = () => {
                 <InputField label="Email" name="email" value={String(form.email ?? "")} onChange={handleChange} />
                 <InputField label="Phone" name="phone" value={String(form.phone ?? "")} onChange={handleChange} />
                 <InputField label="Gender" name="gender" value={String(form.gender ?? "")} onChange={handleChange} />
-                <InputField label="DOB" name="dob" value={String(form.dob ?? "")} onChange={handleChange} />
+                <InputField label="DOB" name="dateOfBirth" value={String(form.dateOfBirth ?? "")} onChange={handleChange} />
                 <InputField label="Address" name="address" value={String(form.address ?? "")} onChange={handleChange} />
                 <InputField label="Profession" name="profession" value={String(form.profession ?? "")} onChange={handleChange} />
               </div>

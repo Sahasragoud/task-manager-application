@@ -1,4 +1,4 @@
-import {API} from "./api"
+import API from "./api"
 import type {User} from "../types/user";
 import type { updateUserPayload } from "../types/UpdateUserPayload";
 import type { UserFormData } from "../pages_admin/AdminUserModel";

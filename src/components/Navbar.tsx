@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import LoginPopup from "../forms/Login";
+import { useAuth } from "../forms/AuthContext";
 import type { User } from "../types/user";
 
-type NavLink = {
-  name: string;
-  href: string;
-};
-
-const publicNavlinks: NavLink[] = [
+const publicNavlinks = [
   { name: "Home", href: "/" },
   { name: "About Us", href: "/about-us" },
   { name: "Features", href: "/features" },
   { name: "Contact Us", href: "/contact-us" },
 ];
 
-const loggedInUserNavlinks: NavLink[] = [
+const loggedInUserNavlinks = [
   { name: "Home", href: "/" },
   { name: "Dashboard", href: "/user-dashboard" },
   { name: "Contact Us", href: "/contact-us" },
 ];
 
-const loggedInAdminNavlinks: NavLink[] = [
+const loggedInAdminNavlinks = [
   { name: "Home", href: "/" },
   { name: "Users", href: "/admin-dashboard/users" },
   { name: "Tasks", href: "/admin-dashboard/tasks" },
@@ -32,29 +28,22 @@ const loggedInAdminNavlinks: NavLink[] = [
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-
   const navigate = useNavigate();
+  const { user, login, logout } = useAuth();
 
-  // Load user from localStorage
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser: User = JSON.parse(storedUser);
-      setUser(parsedUser);
-    }
-  }, []);
+useEffect(() => {
+  // Make login modal globally accessible
+  (window as any).showLoginModal = () => setIsLoginOpen(true);
+}, []);
+
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    navigate("/");
+    logout(); 
+    navigate("/"); 
   };
 
-  // Safer admin check
   const isAdmin = user?.role?.toUpperCase().includes("ADMIN");
-
   const linksToRender = user
     ? isAdmin
       ? loggedInAdminNavlinks
@@ -81,38 +70,7 @@ const Navbar: React.FC = () => {
             ))}
           </ul>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden focus:outline-none"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {isOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-
-          {/* Right Side: Profile / Auth Buttons */}
+          {/* Profile/Auth */}
           <div className="hidden md:flex gap-4 items-center">
             {user ? (
               <div className="relative">
@@ -210,7 +168,7 @@ const Navbar: React.FC = () => {
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onLoginSuccess={(loggedUser: User) => {
-          setUser(loggedUser);
+          login(loggedUser);
           setIsLoginOpen(false);
         }}
       />
