@@ -14,6 +14,7 @@ import AdminReports from "./pages_admin/AdminReports";
 import AdminUsers from "./pages_admin/AdminUsers";
 import AdminTasks from "./pages_admin/AdminTasks";
 // import AdminUsers from "./pages_admin/AdminUsers";
+import ResetPassword from "./forms/ResetPassword";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -47,7 +48,8 @@ const AppRoutes = () => {
           <Route path="/admin-dashboard/reports" element={<AdminReports/>}/>
           <Route path="/admin-dashboard/users" element={<AdminUsers/>}/>
           <Route path="/admin-dashboard/tasks" element={<AdminTasks/>}/>
-          
+          <Route path="/reset-password" element={<ResetPassword />} />        
+        
         </Routes>
       </Layout>
     </Router>

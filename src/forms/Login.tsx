@@ -3,6 +3,7 @@ import axios from "axios";
 import type { User } from "../types/user";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/UserService";
+import { sendPasswordResetEmail } from "../services/EmailService";
 
 type LoginPopupProps = {
   isOpen: boolean;
@@ -18,6 +19,26 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ isOpen, onClose, onLoginSuccess
   const navigate = useNavigate();
 
   if (!isOpen) return null;
+
+ const handleForgotPassword = async () => {
+  console.log("Forgot Password clicked for:", email);
+
+  if (!email.trim()) {
+    setError("Please enter your email to reset password.");
+    return;
+  }
+
+  try {
+    const response = await sendPasswordResetEmail(email);
+    console.log("Response:", response);
+    setError("Password reset email sent. Please check your inbox.");
+  } catch (err) {
+    console.error("Error sending password reset email:", err);
+    setError("Failed to send password reset email. Please try again later.");
+  }
+};
+
+
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -133,7 +154,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           <div className="flex justify-end text-sm mt-1">
             <button
               type="button"
-              onClick={() => navigate("/forgot-password")}
+              onClick={handleForgotPassword}
               className="text-blue-600 hover:underline"
             >
               Forgot Password?
