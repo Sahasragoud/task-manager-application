@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/users/forgot-password", "/api/users/verify-reset-token", "/api/users/reset-password").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")  // ✅ only ADMIN can access
                         .requestMatchers("/api/users/**", "/api/tasks").authenticated()
                         .anyRequest().authenticated()

@@ -94,12 +94,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> resetPassword(String token , String newPassword){
+    public ResponseEntity<String> resetPassword(String token, String newPassword) {
         User user = userRepository.findByResetToken(token);
+
+        if (user == null) {
+            return ResponseEntity.badRequest().body("Invalid token");
+        }
+
+        if (user.getResetTokenExpiry() == null || user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Token expired");
+        }
+
         user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+        user.setResetTokenExpiry(null);
         userRepository.save(user);
+
         return ResponseEntity.ok("Password reset successful");
     }
+
 
 
     @Override
@@ -114,6 +127,22 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         scheduledEmailJob.sendPasswordResetEmail(user.getEmail(), token);
+    }
+
+
+    @Override
+    public User verifyResetToken(String token) {
+        User user = userRepository.findByResetToken(token);
+        if (user == null) {
+            throw new UserNotFoundException("Invalid or expired token");
+        }
+
+        // Check token expiry
+        if (user.getResetTokenExpiry() == null || user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token expired");
+        }
+
+        return user;
     }
 
 }
